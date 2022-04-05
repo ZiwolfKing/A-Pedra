@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
 
     public float moveSpeed;
 
+    public float cooldownTime;
+
+    private float nextFireTime = 0;
+
     public Rigidbody2D rb;
 
     public Weapon weapon; 
@@ -35,13 +39,16 @@ public class PlayerController : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        if(Input.GetMouseButtonDown(0))
+        if (Time.time > nextFireTime)
         {
-            weapon.Fire();
+            if(Input.GetMouseButtonDown(0))
+            {
+                weapon.Fire();
+                nextFireTime = Time.time + cooldownTime;
+            }
         }
 
         moveDirection = new Vector2(moveX, moveY).normalized;
-
         mousePosition = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
     }
 
